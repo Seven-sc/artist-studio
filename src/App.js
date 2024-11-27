@@ -1,23 +1,40 @@
 import logo from './logo.svg';
 import './App.css';
+import { ethers } from "ethers";
+
+const connect = async () => {
+
+  let signer = null;
+
+  let provider;
+  if (window.ethereum == null) {
+
+    // If MetaMask is not installed, we use the default provider,
+    // which is backed by a variety of third-party services (such
+    // as INFURA). They do not have private keys installed,
+    // so they only have read-only access
+    console.log("MetaMask not installed; using read-only defaults")
+    provider = ethers.getDefaultProvider()
+
+  } else {
+
+    // Connect to the MetaMask EIP-1193 object. This is a standard
+    // protocol that allows Ethers access to make all read-only
+    // requests through MetaMask.
+    provider = new ethers.BrowserProvider(window.ethereum)
+
+    // It also provides an opportunity to request access to write
+    // operations, which will be performed by the private key
+    // that MetaMask manages for the user.
+    signer = await provider.getSigner();
+    console.log("signer", signer);
+  }
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={connect}>connect wallet</button>
     </div>
   );
 }
