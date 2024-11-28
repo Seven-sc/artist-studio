@@ -31,4 +31,12 @@ contract Lock {
 
         owner.transfer(address(this).balance);
     }
+
+    string public message = "hello world";
+    event SetMessage(string msg);
+
+    function setMessage(string memory _message) external {
+        message = _message;
+        emit SetMessage(_message);
+    }
 }

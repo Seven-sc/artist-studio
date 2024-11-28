@@ -122,5 +122,14 @@ describe("Lock", function () {
         );
       });
     });
+
+    describe("message", function() {
+      it("should get right message", async function () {
+        const { lock, owner } = await loadFixture(deployOneYearLockFixture);
+
+        expect(await lock.message()).to.equal("hello world");
+      });
+    });
+
   });
 });
